@@ -1,7 +1,11 @@
 package com.todo.todolist.user;
 
+import com.todo.todolist.task.TaskEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -15,4 +19,7 @@ public class UserEntity {
 
     private String name;
     private String age;
+
+    @OneToMany(mappedBy = "userEntity")
+    private List<TaskEntity> listTasks = new ArrayList<>();
 }
