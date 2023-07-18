@@ -1,2 +1,2 @@
 # todo-api
-Simple To-Do List using Spring Boot
+To-Do List using Spring Boot
