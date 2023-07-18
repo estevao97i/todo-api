@@ -2,6 +2,7 @@ package com.todo.todolist.user;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -23,27 +24,42 @@ public class UserService implements Serializable {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public UserDTO findById(Long id) throws Exception {
-        var user = userRepository.findById(id);
-        if (user.isPresent()) {
-            var userDTO = new UserDTO();
-            userDTO.setName(user.get().getName());
-            userDTO.setAge(user.get().getAge());
+    public UserConsultDTO findById(Long id) throws Exception {
+        try {
+            var user = userRepository.findById(id);
+            if (user.isPresent()) {
+                var userDTO = new UserConsultDTO();
+                userDTO.setName(user.get().getName());
+                userDTO.setAge(user.get().getAge());
 
-            return userDTO;
+                return userDTO;
+            }
+            throw new Exception("Not found");
+        } catch (Exception e) {
+            throw new Exception(e);
         }
-        throw new Exception("Not found");
+    }
+
+    public List<UserDTO> insert(UserDTO user) throws Exception {
+        UserEntity userEntity = new UserEntity();
+        try {
+            userEntity.setName(user.getName());
+            userEntity.setAge(user.getAge());
+            userRepository.save(userEntity);
+            return findAll();
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
     }
 
     public List<UserDTO> update(UserDTO user) throws Exception {
+        UserEntity userEntity = new UserEntity();
         try {
-            UserEntity userEntity = new UserEntity();
-            userEntity.setName(userEntity.getName());
-            userEntity.setAge(userEntity.getAge());
+            userEntity.setId(user.getId());
+            userEntity.setName(user.getName());
+            userEntity.setAge(user.getAge());
             userRepository.save(userEntity);
-
             return findAll();
-
         } catch (Exception e) {
             throw new Exception(e);
         }

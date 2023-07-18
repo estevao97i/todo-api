@@ -11,14 +11,12 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO implements Serializable {
+public class UserConsultDTO implements Serializable {
 
-    Long id;
     String name;
     String age;
 
-    public UserDTO(UserEntity userEntity) {
-        id = userEntity.getId();
+    public UserConsultDTO(UserEntity userEntity) {
         name = userEntity.getName();
         age = userEntity.getAge();
     }
