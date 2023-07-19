@@ -18,7 +18,7 @@ public class UserEntity {
     private Long id;
 
     private String name;
-    private String age;
+    private String phoneNumber;
 
     @OneToMany(mappedBy = "userEntity")
     private List<TaskEntity> listTasks = new ArrayList<>();

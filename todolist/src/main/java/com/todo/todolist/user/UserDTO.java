@@ -15,11 +15,11 @@ public class UserDTO implements Serializable {
 
     Long id;
     String name;
-    String age;
+    String phoneNumber;
 
     public UserDTO(UserEntity userEntity) {
         id = userEntity.getId();
         name = userEntity.getName();
-        age = userEntity.getAge();
+        phoneNumber = userEntity.getPhoneNumber();
     }
 }

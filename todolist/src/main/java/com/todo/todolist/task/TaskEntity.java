@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
@@ -17,6 +19,8 @@ public class TaskEntity {
     private Long id;
 
     private String nameTask;
+
+    private LocalDate dayOfWeek;
 
     @ManyToOne()
     private UserEntity userEntity;

@@ -29,7 +29,7 @@ public class UserService implements Serializable {
             if (user.isPresent()) {
                 var userDTO = new UserConsultDTO();
                 userDTO.setName(user.get().getName());
-                userDTO.setAge(user.get().getAge());
+                userDTO.setPhoneNumber(user.get().getPhoneNumber());
 
                 return userDTO;
             }
@@ -43,7 +43,7 @@ public class UserService implements Serializable {
         UserEntity userEntity = new UserEntity();
         try {
             userEntity.setName(user.getName());
-            userEntity.setAge(user.getAge());
+            userEntity.setPhoneNumber(user.getPhoneNumber());
             userRepository.save(userEntity);
             return findAll();
         } catch (Exception e) {
@@ -56,7 +56,7 @@ public class UserService implements Serializable {
         try {
             userEntity.setId(user.getId());
             userEntity.setName(user.getName());
-            userEntity.setAge(user.getAge());
+            userEntity.setPhoneNumber(user.getPhoneNumber());
             userRepository.save(userEntity);
             return findAll();
         } catch (Exception e) {

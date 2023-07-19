@@ -14,10 +14,10 @@ import java.io.Serializable;
 public class UserConsultDTO implements Serializable {
 
     String name;
-    String age;
+    String phoneNumber;
 
     public UserConsultDTO(UserEntity userEntity) {
         name = userEntity.getName();
-        age = userEntity.getAge();
+        phoneNumber = userEntity.getPhoneNumber();
     }
 }
