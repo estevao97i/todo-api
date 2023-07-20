@@ -1,7 +1,10 @@
 package com.todo.todolist.user;
 
+import com.todo.todolist.task.TaskDTO;
+import com.todo.todolist.task.TaskEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -23,14 +26,13 @@ public class UserService implements Serializable {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public UserConsultDTO findById(Long id) throws Exception {
+    public UserDTO findById(Long id) throws Exception {
         try {
             var user = userRepository.findById(id);
             if (user.isPresent()) {
-                var userDTO = new UserConsultDTO();
+                var userDTO = new UserDTO();
                 userDTO.setName(user.get().getName());
                 userDTO.setPhoneNumber(user.get().getPhoneNumber());
-
                 return userDTO;
             }
             throw new Exception("Not found");
@@ -44,6 +46,7 @@ public class UserService implements Serializable {
         try {
             userEntity.setName(user.getName());
             userEntity.setPhoneNumber(user.getPhoneNumber());
+            userEntity.setListTasks(converterListaDTOparaEntidades(user.getTaskDTOList()));
             userRepository.save(userEntity);
             return findAll();
         } catch (Exception e) {
@@ -52,12 +55,15 @@ public class UserService implements Serializable {
     }
 
     public List<UserDTO> update(UserDTO user) throws Exception {
-        UserEntity userEntity = new UserEntity();
         try {
-            userEntity.setId(user.getId());
-            userEntity.setName(user.getName());
-            userEntity.setPhoneNumber(user.getPhoneNumber());
-            userRepository.save(userEntity);
+            var userEdit = userRepository.findById(user.getId());
+            if (userEdit.isPresent()) {
+                userEdit.get().setId(user.getId());
+                userEdit.get().setName(user.getName());
+                userEdit.get().setPhoneNumber(user.getPhoneNumber());
+                userEdit.get().setListTasks(converterListaDTOparaEntidades(user.getTaskDTOList()));
+                userRepository.save(userEdit.get());
+            }
             return findAll();
         } catch (Exception e) {
             throw new Exception(e);
@@ -71,6 +77,24 @@ public class UserService implements Serializable {
         } catch (Exception e) {
             throw new Exception(e);
         }
+    }
+
+    public TaskEntity convertDTOToEntity(TaskDTO taskDTO) {
+        TaskEntity task = new TaskEntity();
+        task.setId(taskDTO.getId());
+        task.setNameTask(taskDTO.getNameTask());
+        task.setDayOfWeek(taskDTO.getDayOfWeek());
+
+        return task;
+    }
+
+    public List<TaskEntity> converterListaDTOparaEntidades(List<TaskDTO> dtoList) {
+        List<TaskEntity> listaEntidades = new ArrayList<>();
+        for (TaskDTO taskDTO : dtoList) {
+            TaskEntity task = convertDTOToEntity(taskDTO);
+            listaEntidades.add(task);
+        }
+        return listaEntidades;
     }
 
 }

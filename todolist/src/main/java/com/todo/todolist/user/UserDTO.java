@@ -1,6 +1,7 @@
 package com.todo.todolist.user;
 
 import com.todo.todolist.task.TaskDTO;
+import com.todo.todolist.task.TaskEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,11 +17,10 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class UserDTO implements Serializable {
 
-    Long id;
-    String name;
-    String phoneNumber;
-
-    List<TaskDTO> taskDTOList;
+    private Long id;
+    private String name;
+    private String phoneNumber;
+    private List<TaskDTO> taskDTOList;
 
     public UserDTO(UserEntity userEntity) {
         id = userEntity.getId();

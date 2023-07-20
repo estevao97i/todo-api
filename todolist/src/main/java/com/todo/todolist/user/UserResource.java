@@ -19,7 +19,7 @@ public class UserResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserConsultDTO> findById(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<UserDTO> findById(@PathVariable("id") Long id) throws Exception {
         return ResponseEntity.ok(userService.findById(id));
     }
 
@@ -34,7 +34,7 @@ public class UserResource {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<List<UserDTO>> update(@PathVariable Long id) throws Exception {
+    public ResponseEntity<List<UserDTO>> delete(@PathVariable("id") Long id) throws Exception {
         return ResponseEntity.ok(userService.delete(id));
     }
 }

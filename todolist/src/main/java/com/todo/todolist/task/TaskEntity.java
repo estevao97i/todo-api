@@ -2,7 +2,6 @@ package com.todo.todolist.task;
 
 import com.todo.todolist.user.UserEntity;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,5 +22,5 @@ public class TaskEntity {
     private LocalDate dayOfWeek;
 
     @ManyToOne()
-    private UserEntity userEntity;
+    private UserEntity user;
 }
