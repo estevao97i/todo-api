@@ -33,6 +33,11 @@ public class UserResource {
         return ResponseEntity.ok(userService.update(userDTO));
     }
 
+    @PutMapping(value = "/update-task")
+    public ResponseEntity<List<UserDTO>> updateTasksByUser(@RequestBody UserDTO userDTO) throws Exception {
+        return ResponseEntity.ok(userService.updateTasksByUser(userDTO));
+    }
+
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<List<UserDTO>> delete(@PathVariable("id") Long id) throws Exception {
         return ResponseEntity.ok(userService.delete(id));

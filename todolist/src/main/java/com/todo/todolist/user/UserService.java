@@ -4,6 +4,7 @@ import com.todo.todolist.task.TaskDTO;
 import com.todo.todolist.task.TaskEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,9 +59,24 @@ public class UserService implements Serializable {
         try {
             var userEdit = userRepository.findById(user.getId());
             if (userEdit.isPresent()) {
-                userEdit.get().setId(user.getId());
-                userEdit.get().setName(user.getName());
-                userEdit.get().setPhoneNumber(user.getPhoneNumber());
+                if (user.getName() != null) {
+                    userEdit.get().setName(user.getName());
+                }
+                if (user.getPhoneNumber() != null) {
+                    userEdit.get().setPhoneNumber(user.getPhoneNumber());
+                }
+                userRepository.save(userEdit.get());
+            }
+            return findAll();
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
+
+    public List<UserDTO> updateTasksByUser(UserDTO user) throws Exception {
+        try {
+            var userEdit = userRepository.findById(user.getId());
+            if (userEdit.isPresent() && !user.getTaskDTOList().isEmpty()) {
                 userEdit.get().setListTasks(converterListaDTOparaEntidades(user.getTaskDTOList()));
                 userRepository.save(userEdit.get());
             }
