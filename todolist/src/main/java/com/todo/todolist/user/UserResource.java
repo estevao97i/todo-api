@@ -1,5 +1,6 @@
 package com.todo.todolist.user;
 
+import com.todo.todolist.task.TaskDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,11 @@ public class UserResource {
     @PutMapping(value = "/update-task")
     public ResponseEntity<List<UserDTO>> updateTasksByUser(@RequestBody UserDTO userDTO) throws Exception {
         return ResponseEntity.ok(userService.updateTasksByUser(userDTO));
+    }
+
+    @PutMapping(value = "/insert-task/{id}")
+    public ResponseEntity<UserDTO> updateSingleTaskByUser(@RequestBody TaskDTO taskDTO, @PathVariable("id") Long id) throws Exception {
+        return ResponseEntity.ok(userService.updateSingleTaskByUser(taskDTO, id));
     }
 
     @DeleteMapping(value = "/{id}")

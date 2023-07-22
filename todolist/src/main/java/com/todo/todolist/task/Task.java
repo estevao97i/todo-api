@@ -1,6 +1,6 @@
 package com.todo.todolist.task;
 
-import com.todo.todolist.user.UserEntity;
+import com.todo.todolist.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Table(name = "tasks")
-public class TaskEntity {
+public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,5 +22,5 @@ public class TaskEntity {
     private LocalDate dayOfWeek;
 
     @ManyToOne()
-    private UserEntity user;
+    private User user;
 }

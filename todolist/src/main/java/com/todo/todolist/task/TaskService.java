@@ -1,8 +1,5 @@
 package com.todo.todolist.task;
 
-import com.todo.todolist.user.UserEntity;
-import com.todo.todolist.user.UserRepository;
-import com.todo.todolist.user.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -49,7 +46,7 @@ public class TaskService implements Serializable {
     public List<TaskDTO> insert(TaskDTO taskDTO) {
         try {
 
-            var taskEntity = new TaskEntity();
+            var taskEntity = new Task();
             taskEntity.setNameTask(taskDTO.getNameTask());
             taskEntity.setDayOfWeek(taskDTO.getDayOfWeek());
             taskRepository.save(taskEntity);
@@ -62,7 +59,7 @@ public class TaskService implements Serializable {
 
     public List<TaskDTO> update(TaskDTO taskDTO) {
         try {
-            var taskEntity = new TaskEntity();
+            var taskEntity = new Task();
             taskEntity.setId(taskDTO.getId());
             taskEntity.setNameTask(taskDTO.getNameTask());
             taskEntity.setDayOfWeek(taskDTO.getDayOfWeek());

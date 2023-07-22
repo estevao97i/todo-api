@@ -1,11 +1,12 @@
 package com.todo.todolist.user;
 
 import com.todo.todolist.task.TaskDTO;
-import com.todo.todolist.task.TaskEntity;
+import com.todo.todolist.task.Task;
+import com.todo.todolist.task.TaskRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.action.internal.EntityActionVetoException;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class UserService implements Serializable {
 
     private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
 
     public List<UserDTO> findAll() {
         var list = userRepository.findAll();
@@ -43,7 +45,7 @@ public class UserService implements Serializable {
     }
 
     public List<UserDTO> insert(UserDTO user) throws Exception {
-        UserEntity userEntity = new UserEntity();
+        User userEntity = new User();
         try {
             userEntity.setName(user.getName());
             userEntity.setPhoneNumber(user.getPhoneNumber());
@@ -86,6 +88,20 @@ public class UserService implements Serializable {
         }
     }
 
+    public UserDTO updateSingleTaskByUser(TaskDTO taskDTO, Long id) throws Exception {
+        try {
+            var userEdit = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("not found"));
+            var task = convertDTOToEntity(taskDTO);
+            var taskFinal = taskRepository.findById(task.getId()).orElseThrow(() -> new EntityNotFoundException("not found"));
+            userEdit.addTask(taskFinal);
+            userRepository.save(userEdit);
+
+            return findById(id);
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
+
     public List<UserDTO> delete(Long id) throws Exception {
         try {
             userRepository.deleteById(id);
@@ -95,8 +111,8 @@ public class UserService implements Serializable {
         }
     }
 
-    public TaskEntity convertDTOToEntity(TaskDTO taskDTO) {
-        TaskEntity task = new TaskEntity();
+    public Task convertDTOToEntity(TaskDTO taskDTO) {
+        Task task = new Task();
         task.setId(taskDTO.getId());
         task.setNameTask(taskDTO.getNameTask());
         task.setDayOfWeek(taskDTO.getDayOfWeek());
@@ -104,10 +120,10 @@ public class UserService implements Serializable {
         return task;
     }
 
-    public List<TaskEntity> converterListaDTOparaEntidades(List<TaskDTO> dtoList) {
-        List<TaskEntity> listaEntidades = new ArrayList<>();
+    public List<Task> converterListaDTOparaEntidades(List<TaskDTO> dtoList) {
+        List<Task> listaEntidades = new ArrayList<>();
         for (TaskDTO taskDTO : dtoList) {
-            TaskEntity task = convertDTOToEntity(taskDTO);
+            Task task = convertDTOToEntity(taskDTO);
             listaEntidades.add(task);
         }
         return listaEntidades;

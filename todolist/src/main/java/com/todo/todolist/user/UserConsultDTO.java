@@ -16,8 +16,8 @@ public class UserConsultDTO implements Serializable {
     String name;
     String phoneNumber;
 
-    public UserConsultDTO(UserEntity userEntity) {
-        name = userEntity.getName();
-        phoneNumber = userEntity.getPhoneNumber();
+    public UserConsultDTO(User user) {
+        name = user.getName();
+        phoneNumber = user.getPhoneNumber();
     }
 }
