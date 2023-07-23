@@ -20,7 +20,7 @@ public class UserResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<UserDTO> findById(@PathVariable("id") Long id) throws Exception {
+    public ResponseEntity<UserDTO> findById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(userService.findById(id));
     }
 
@@ -42,6 +42,11 @@ public class UserResource {
     @PutMapping(value = "/insert-task/{id}")
     public ResponseEntity<UserDTO> updateSingleTaskByUser(@RequestBody TaskDTO taskDTO, @PathVariable("id") Long id) throws Exception {
         return ResponseEntity.ok(userService.updateSingleTaskByUser(taskDTO, id));
+    }
+
+    @PutMapping(value = "/delete-task/{id}")
+    public ResponseEntity<UserDTO> deleteSingleTaskByUser(@RequestBody TaskDTO taskDTO, @PathVariable("id") Long id) throws Exception {
+        return ResponseEntity.ok(userService.deleteSingleTaskByUser(taskDTO, id));
     }
 
     @DeleteMapping(value = "/{id}")

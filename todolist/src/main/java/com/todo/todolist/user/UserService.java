@@ -28,19 +28,21 @@ public class UserService implements Serializable {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public UserDTO findById(Long id) throws Exception {
-        try {
-            var user = userRepository.findById(id);
-            if (user.isPresent()) {
+    public UserDTO findById(Long id) {
+            var user = userRepository.findById(id).orElseThrow();
                 var userDTO = new UserDTO();
-                userDTO.setName(user.get().getName());
-                userDTO.setPhoneNumber(user.get().getPhoneNumber());
+                userDTO.setName(user.getName());
+                userDTO.setPhoneNumber(user.getPhoneNumber());
+                var listDTO = new ArrayList<TaskDTO>();
+                user.getListTasks().forEach(value -> {
+                    var tempDTO = new TaskDTO();
+                    tempDTO.setId(value.getId());
+                    tempDTO.setNameTask(value.getNameTask());
+                    tempDTO.setDayOfWeek(value.getDayOfWeek());
+                    listDTO.add(tempDTO);
+                });
+                userDTO.setTaskDTOList(listDTO);
                 return userDTO;
-            }
-            throw new Exception("Not found");
-        } catch (Exception e) {
-            throw new Exception(e);
-        }
     }
 
     public List<UserDTO> insert(UserDTO user) throws Exception {
@@ -97,6 +99,20 @@ public class UserService implements Serializable {
             var task = convertDTOToEntity(taskDTO);
             var taskFinal = taskRepository.findById(task.getId()).orElseThrow(() -> new EntityNotFoundException("not found"));
             userEdit.addTask(taskFinal);
+            userRepository.save(userEdit);
+
+            return findById(id);
+        } catch (Exception e) {
+            throw new Exception(e);
+        }
+    }
+
+    public UserDTO deleteSingleTaskByUser(TaskDTO taskDTO, Long id) throws Exception {
+        try {
+            var userEdit = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("not found"));
+            var task = convertDTOToEntity(taskDTO);
+            var taskFinal = taskRepository.findById(task.getId()).orElseThrow(() -> new EntityNotFoundException("not found"));
+            userEdit.removeTask(taskFinal);
             userRepository.save(userEdit);
 
             return findById(id);
