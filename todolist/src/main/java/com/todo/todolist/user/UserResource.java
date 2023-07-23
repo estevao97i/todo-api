@@ -34,9 +34,9 @@ public class UserResource {
         return ResponseEntity.ok(userService.update(userDTO));
     }
 
-    @PutMapping(value = "/update-task")
-    public ResponseEntity<List<UserDTO>> updateTasksByUser(@RequestBody UserDTO userDTO) throws Exception {
-        return ResponseEntity.ok(userService.updateTasksByUser(userDTO));
+    @PutMapping(value = "/update-task/{id}")
+    public ResponseEntity<List<UserDTO>> updateTasksByUser(@RequestBody List<TaskDTO> taskDTOList, @PathVariable("id") Long id) throws Exception {
+        return ResponseEntity.ok(userService.updateTasksByUser(taskDTOList, id));
     }
 
     @PutMapping(value = "/insert-task/{id}")

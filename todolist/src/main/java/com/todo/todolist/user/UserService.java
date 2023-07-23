@@ -6,7 +6,6 @@ import com.todo.todolist.task.TaskRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.action.internal.EntityActionVetoException;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -75,12 +74,16 @@ public class UserService implements Serializable {
         }
     }
 
-    public List<UserDTO> updateTasksByUser(UserDTO user) throws Exception {
+    public List<UserDTO> updateTasksByUser(List<TaskDTO> taskDTOList, Long id) throws Exception {
         try {
-            var userEdit = userRepository.findById(user.getId());
-            if (userEdit.isPresent() && !user.getTaskDTOList().isEmpty()) {
-                userEdit.get().setListTasks(converterListaDTOparaEntidades(user.getTaskDTOList()));
-                userRepository.save(userEdit.get());
+            var userEdit = userRepository.findById(id).orElseThrow();
+            if (!taskDTOList.isEmpty()) {
+                var listEntity = converterListaDTOparaEntidades(taskDTOList);
+                listEntity.forEach(task -> {
+                            var taskValue = taskRepository.findById(task.getId()).orElseThrow();
+                            userEdit.addTask(taskValue);
+                        });
+                userRepository.save(userEdit);
             }
             return findAll();
         } catch (Exception e) {
